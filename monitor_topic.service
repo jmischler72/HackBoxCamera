@@ -1,0 +1,14 @@
+[Unit]
+Description=Monitoring script for global_security_level topic
+After=network.target
+
+[Service]
+ExecStart=/opt/monitor_topic_4.sh
+WorkingDirectory=/opt/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

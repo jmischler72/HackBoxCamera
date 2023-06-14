@@ -1,0 +1,11 @@
+[Unit]
+Description=Serveur Flask pour le Projet
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/FLASK/
+ExecStart=/usr/bin/python3 /home/pi/FLASK/python.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

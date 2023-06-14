@@ -1,0 +1,172 @@
+<html>
+    <head>
+	<meta charset="UTF-8">
+    <title>Raspberry Pi - Surveillance Camera</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
+	
+	
+    </head>
+    <body>
+
+    <div id="stream_cam" class="container text-center mt-1" style= {{display}}>
+		
+		<img    style="position:absolute;" id="myImg" src = {{photo}} width="680px" height="520px">
+		<img     style="position:relative;top: 20;left: 20;" src="{{ url_for('video_feed') }}">
+		
+    </div>
+  
+	<!-- <div class='product-holder'> -->
+            <!-- <img src="1.jpg" width="250" height="250" class='product-image'> -->
+            <!-- <img src="plus.png" width="50px" height="50px" class='plus-image'> -->
+	
+	<br><br><br>
+    <div class="container text-center mt-2">
+	<div class="row">
+				<div class ="col-sm" >
+				<h6> Contrôle capteur </h6>
+						<a href=# id=allumer>
+						<button onclick="document.getElementById('myImg').src='{{ url_for('static', filename='carre_vert.jpg') }}'" id="allumer" class="btn btn-success">Allumer</button>
+						</a>
+						
+						<a href=# id=eteint>
+                        <button id="exitBtn"  id="eteindre" class="btn btn-danger">Eteindre</button>
+                        </a>
+						
+				</div>		
+				<div class = "col-sm"  >
+					
+						<h6> Contrôle caméra </h6>
+				
+						<a href=# id=take-picture>	
+                        <!-- <button   onclick=""  id=auto class="btn btn-dark" value="Prendre une photo"></button> -->
+						<input class="btn btn-dark" onclick="take-picture()" type="button" value="Prendre une photo" id="auto" />
+                        </a>
+						
+						<a href=# id=on_off>
+						<input class="btn btn-info" onclick="on_off()" type="button" value="On/Off" />
+						</a>
+						
+						
+						
+						
+                </div>
+    </div>
+    </div>
+                
+
+    
+    </div>
+	
+	
+	
+	<script>
+	$(function() {
+	$('a#allumer').on('click', function(e) {
+		e.preventDefault()
+		document.getElementById('auto').disabled="disabled"
+		document.getElementById('auto').value="Mode_Auto"
+		$.getJSON('/mouvement',
+			function(data) {
+		//do nothing
+		});
+		
+		
+		$.getJSON('/allumer',
+			function(data) {
+		//do nothing
+		});
+		return false;
+	});
+	});
+	
+	
+	
+	var exitBtn = document.getElementById("exitBtn");
+	exitBtn.addEventListener("click", password);
+	
+	function password() {
+		var realPW = "adminPolytech";
+		var pword = prompt("Please enter your password:");
+		if (realPW == pword) {
+			document.getElementById('myImg').src='{{ url_for('static', filename='carre_rouge.jpg') }}'
+			document.getElementById('auto').disabled=""
+			document.getElementById('auto').value="Prendre une photo"
+			$.getJSON('/eteint',
+			function(data) {
+			//do nothing
+			});
+			return false;
+			
+		}
+	
+		alert("Merci de réessayer mot de passe faux");
+		
+	}
+	
+$(function() {
+  $('a#take-picture').on('click', function(e) {
+    e.preventDefault()
+    $.getJSON('/picture',
+        function(data) {
+      //do nothing
+    });
+    return false;
+  });
+}); 
+
+// stop stream - called when pressing red X
+
+
+
+
+	
+
+$(function() {
+  $('a#on_off').on('click', function(e) {
+    var div = document.getElementById('stream_cam');
+	var audio = new Audio('{{ url_for('static', filename='alarme.mp3') }}');
+
+	var enter = prompt("Please enter your password:");
+	var realPW = {{password}};
+    if (div.style.display !== 'none') {
+		if (enter == realPW){
+
+			div.style.display = 'none';
+			var status = "/off_stream";
+			
+		}
+		else{
+			alert("Merci de réessayer mot de passe faux");
+			audio.play();
+			
+		}
+	}
+    else {
+		if (enter == realPW){
+			div.style.display = 'block';
+			var status = "/on_stream";
+			
+		}
+		else{
+			alert("Merci de réessayer mot de passe faux");
+			audio.play();
+		}
+	}
+	
+    e.preventDefault()
+    $.getJSON(status,
+        function(data) {
+      //do nothing
+    });
+    return false;
+  });
+}); 
+
+	
+	
+	</script>
+    
+    </body>
+    </html>
