@@ -5,6 +5,7 @@
 - Php
 - PhpMyAdmin
 - Python3 / Pip
+- Mariadb
 
 ## Dépendances de Python
 - Flask
